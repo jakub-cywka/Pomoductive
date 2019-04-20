@@ -1,0 +1,580 @@
+/* colors palette */
+
+:root {
+  --ion-color-primary: #64B5F6;
+  --ion-color-primary-rgb: 100,181,246;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0,0,0;
+  --ion-color-primary-shade: #589fd8;
+  --ion-color-primary-tint: #74bcf7;
+
+  --ion-color-secondary: #2196F3;
+  --ion-color-secondary-rgb: 33,150,243;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255,255,255;
+  --ion-color-secondary-shade: #1d84d6;
+  --ion-color-secondary-tint: #37a1f4;
+
+  --ion-color-tertiary: #BDBDBD;
+  --ion-color-tertiary-rgb: 189,189,189;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-contrast-rgb: 0,0,0;
+  --ion-color-tertiary-shade: #a6a6a6;
+  --ion-color-tertiary-tint: #c4c4c4;
+
+  --ion-color-success: #10dc60;
+  --ion-color-success-rgb: 16,220,96;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0,0,0;
+  --ion-color-success-shade: #0ec254;
+  --ion-color-success-tint: #28e070;
+
+  --ion-color-warning: #ffce00;
+  --ion-color-warning-rgb: 255,206,0;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255,255,255;
+  --ion-color-warning-shade: #e0b500;
+  --ion-color-warning-tint: #ffd31a;
+
+  --ion-color-danger: #f04141;
+  --ion-color-danger-rgb: 245,61,61;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255,255,255;
+  --ion-color-danger-shade: #d33939;
+  --ion-color-danger-tint: #f25454;
+
+  --ion-color-dark: #424242;
+  --ion-color-dark-rgb: 66,66,66;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255,255,255;
+  --ion-color-dark-shade: #3a3a3a;
+  --ion-color-dark-tint: #555555;
+
+  --ion-color-medium: #989aa2;
+  --ion-color-medium-rgb: 152,154,162;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255,255,255;
+  --ion-color-medium-shade: #86888f;
+  --ion-color-medium-tint: #a2a4ab;
+
+  --ion-color-light: #fafafa;
+  --ion-color-light-rgb: 250,250,250;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0,0,0;
+  --ion-color-light-shade: #dcdcdc;
+  --ion-color-light-tint: #fbfbfb;
+
+  --device-width-xsmall: 384px;
+  --device-width-small: 576px;
+  --device-width-medium: 768px;
+  --device-width-large: 992px;
+  --device-width-xlarge: 1200px;
+
+  --device-height-xsmall: 384px;
+  --device-height-small: 512px;
+  --device-height-medium: 768px;
+  --device-height-large: 800px;
+  --device-height-xlarge: 1024px;
+}
+
+/* prepare the root elements */
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  padding: 0%;
+  margin: 0%;
+}
+
+/* default styles */
+
+.is-container, .is-circle.has-progress > span {
+  flex-direction: column;
+}
+
+.is-container, .is-circle.has-progress > span {
+  justify-content: center;
+  align-items: center;
+}
+
+.is-container, .is-circle.has-progress > span {
+  display: flex;
+}
+
+.is-container, .is-wheel, .is-circle, .is-circle.has-progress::after, .is-circle.has-progress > span {
+  text-align: center;
+}
+
+.is-container.is-row {
+  flex-direction: row !important;
+}
+
+.is-container.is-fullsized, .is-wheel, .is-circle, .is-circle.has-progress > span {
+  width: 100%;
+  height: 100%;
+}
+
+.is-container.is-fullsized {
+  margin: 0%;
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+.is-wheel, .is-circle, .is-circle.has-progress::after, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+  border-radius: 50%;
+}
+
+.is-circle.has-progress {
+  background-color: var(--ion-color-primary);
+}
+
+.is-circle.has-progress, .is-triangle-icon {
+  position: relative;
+}
+
+.is-circle.has-progress::after {
+  border: none;
+  display: block;
+}
+
+.is-circle.has-progress::after, .is-triangle-icon::before, .is-triangle-icon::after {
+  content: '';
+}
+
+.is-circle.has-progress::after, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half, .is-triangle-icon::before, .is-triangle-icon::after {
+  position: absolute;
+}
+
+.is-circle.has-progress.is-light::after, .is-rectangle-icon, .is-triangle-icon {
+  background-color: var(--ion-color-light);
+}
+
+.is-circle.has-progress.is-dark::after {
+  background-color: var(--ion-color-dark);
+}
+
+.is-circle.has-progress > span {
+  color: var(--ion-color-secondary);
+  z-index: 2;
+}
+
+.is-circle.has-progress.is-over-half .is-half.is-left {
+  clip: rect(auto, auto, auto, auto);
+}
+
+.is-progress {
+  box-sizing: border-box;
+}
+
+.is-circle.has-progress.is-over-half .is-less-half, .is-wheel.is-secondary {
+  background-color: var(--ion-color-secondary);
+}
+
+.is-circle.has-progress:not(.is-over-half) .is-less-half {
+  display: none;
+}
+
+.is-triangle-icon {
+  text-align: left;
+  width: 24px;
+  height: 24px;
+}
+
+.is-triangle-icon, .is-triangle-icon::before, .is-triangle-icon::after {
+  border-top-right-radius: 30%;
+}
+
+.is-triangle-icon.is-forward {
+  transform: rotate(-90deg) skewX(-30deg) scale(1, .866);
+  right: 3.125%;
+}
+
+.is-triangle-icon.is-forward, .is-triangle-icon.is-backward {
+  bottom: 6.25%;
+}
+
+.is-triangle-icon.is-backward {
+  transform: rotate(-30deg) skewX(-30deg) scale(1, .866);
+  left: 3.125%;
+}
+
+.is-triangle-icon::before, .is-triangle-icon::after {
+  background-color: inherit;
+  width: inherit;
+  height: inherit;
+}
+
+.is-triangle-icon.is-forward::before, .is-triangle-icon.is-backward::before {
+  transform: rotate(-135deg) skewX(-45deg) scale(1.414, .707) translate(0, -50%);
+}
+
+.is-triangle-icon.is-forward::after, .is-triangle-icon.is-backward::after {
+  transform: rotate(135deg) skewY(-45deg) scale(.707, 1.414) translate(50%); 
+}
+
+.is-rectangle-icon {
+  width: 48px;
+  height: 48px;
+  border: 0px solid var(--ion-color-light);
+}
+
+/* for the lowest dimensions devices (especially fit bands) */
+
+@media only screen and (max-width: 127.98px) {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half, .is-progress {
+    width: 24px;
+  }
+  .is-container.is-sized, .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half, .is-progress {
+    height: 24px;
+  }
+  .is-circle.has-progress, .is-circle.has-progress > span {
+    line-height: 24px;
+  }
+  .is-circle.has-progress::after {
+    top: 4px;
+    left: 4px;
+    width: 16px;
+    height: 16px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 24px, 24px, 12px);
+  }
+  .is-progress {
+    clip: rect(0, 12px, 24px, 0);
+    border: 4px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 16px;
+  }
+  .is-container.is-middle-action, .is-container.is-side-action, .is-triangle-icon, .is-rectangle-icon, .is-then-text, ion-segment, ion-segment-button {
+    display: none;
+  }
+}
+
+/* for the lower dimensions devices (especially the Apple Watch and some other wearables) */
+
+@media only screen {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    width: 80px;
+  }
+  .is-container.is-sized, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    height: 80px;
+  }
+  .is-circle.has-progress, .is-circle.has-progress > span {
+    line-height: 80px;
+  }
+  .is-circle.has-progress::after {
+    top: 8px;
+    left: 8px;
+    width: 64px;
+    height: 64px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 80px, 80px, 40px);
+  }
+  .is-progress {
+    clip: rect(0, 40px, 80px, 0);
+    border: 8px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 16px;
+  }
+  .is-then-text {
+    display: none;
+  }
+  .is-container.is-middle-action {
+    width: 32px;
+    height: 32px;
+  }
+  .is-container.is-side-action {
+    width: 24px;
+    height: 24px;
+  }
+  .is-triangle-icon {
+    width: 6px;
+    height: 6px;
+  }
+  .is-rectangle-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* for the low dimensions devices (for example wearables, but the width doesn't matter in this case, so i'm not limiting it only for these devices) */
+
+@media only screen and (min-height: 256px) and (min-width: 160px) {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    width: 160px;
+  }
+  .is-container.is-sized, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    height: 160px;
+  }
+  .is-circle.has-progress, .is-circle.has-progress > span {
+    line-height: 160px;
+  }
+  .is-circle.has-progress::after {
+    top: 8px;
+    left: 8px;
+    width: 144px;
+    height: 144px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 160px, 160px, 80px);
+  }
+  .is-progress {
+    clip: rect(0, 80px, 160px, 0);
+    border: 8px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 48px;
+  }
+  .is-then-text {
+    font-size: 8px;
+    margin-top: 8px;
+    display: flex;
+  }
+  .is-container.is-middle-action {
+    width: 64px;
+    height: 64px;
+  }
+  .is-container.is-side-action {
+    width: 48px;
+    height: 48px;
+  }
+  .is-triangle-icon {
+    width: 12px;
+    height: 12px;
+  }
+  .is-rectangle-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* for smaller dimensions devices (for example smartphones) */
+
+@media only screen and (min-height: 480px) and (min-width: 320px) {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half, .is-progress {
+    width: 320px;
+  }
+  .is-container.is-sized, .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half, .is-progress {
+    height: 320px;
+  }
+  .is-circle.has-progress, .is-circle.has-progress > span {
+    line-height: 320px;
+  }
+  .is-circle.has-progress::after {
+    top: 16px;
+    left: 16px;
+    width: 288px;
+    height: 288px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 320px, 320px, 160px);
+  }
+  .is-progress {
+    clip: rect(0, 160px, 320px, 0);
+    border: 16px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 96px;
+  }
+  .is-then-text {
+    font-size: 16px;
+    margin-top: 16px;
+    display: flex;
+  }
+  .is-container.is-middle-action {
+    width: 96px;
+    height: 96px;
+  }
+  .is-container.is-side-action {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* for medium dimensions devices (for example tablets)  */
+
+@media only screen and (min-width: 768px) and (min-height: 768px) {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    width: 640px;
+  }
+  .is-container.is-sized, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    height: 640px;
+  }
+  .is-circle.has-progress, .is-circle.has-progress > span {
+    line-height: 640px;
+  }
+  .is-circle.has-progress::after {
+    top: 32px;
+    left: 32px;
+    width: 576px;
+    height: 576px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 640px, 640px, 320px);
+  }
+  .is-progress {
+    clip: rect(0, 320px, 640px, 0);
+    border: 32px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 160px;
+  }
+  .is-then-text {
+    font-size: 32px;
+    margin-top: 32px;
+    display: flex;
+  }
+  .is-container.is-middle-action {
+    width: 160px;
+    height: 160px;
+  }
+  .is-container.is-side-action {
+    width: 128px;
+    height: 128px;
+  }
+}
+
+/* for irregular, medium dimensions devices */
+
+@media only screen and (min-width: 768px) and (min-height: 720px) {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    width: 576px;
+  }
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    height: 576px;
+  }
+  .is-circle.has-progress, .is-circle.has-progress > span {
+    line-height: 576px;
+  }
+  .is-circle.has-progress::after {
+    top: 32px;
+    left: 32px;
+    width: 512px;
+    height: 512px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 576px, 576px, 288px);
+  }
+  .is-progress {
+    clip: rect(0, 288px, 576px, 0);
+    border: 32px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 128px;
+  }
+  .is-then-text {
+    font-size: 16px;
+    margin-top: 16px;
+    display: flex;
+  }
+  .is-container.is-middle-action {
+    width: 96px;
+    height: 96px;
+  }
+  .is-container.is-side-action {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* for large dimensions devices (for example laptops) */
+
+@media only screen and (min-width: 992px) and (min-height: 720px) {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    width: 576px;
+  }
+  .is-container.is-sized, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    height: 576px;
+  }
+  .is-circle.has-progress {
+    line-height: 576px;
+  }
+  .is-circle.has-progress::after {
+    top: 32px;
+    left: 32px;
+    width: 512px;
+    height: 512px;
+  }
+  .is-circle.has-progress > span {
+    line-height: 576px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 576px, 576px, 288px);
+  }
+  .is-progress {
+    clip: rect(0, 288px, 576px, 0);
+    border: 32px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 128px;
+  }
+  .is-then-text {
+    font-size: 32px;
+    margin-top: 32px;
+    display: flex;
+  }
+  .is-container.is-middle-action {
+    width: 96px;
+    height: 96px;
+  }
+  .is-container.is-side-action {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* for the largest dimensions devices (for example monitors) */
+
+@media only screen and (min-width: 1200px) and (min-height: 1024px) {
+  .is-container.is-sized, .is-circle.has-progress > span, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    width: 768px;
+  }
+  .is-container.is-sized, .is-half.is-left, .is-progress, .is-circle.has-progress.is-over-half .is-less-half {
+    height: 768px;
+  }
+  .is-circle.has-progress, .is-circle.has-progress > span {
+    line-height: 768px;
+  }
+  .is-circle.has-progress::after {
+    top: 32px;
+    left: 32px;
+    width: 704px;
+    height: 704px;
+  }
+  .is-half.is-left, .is-circle.has-progress.is-over-half .is-less-half {
+    clip: rect(0, 768px, 768px, 384px);
+  }
+  .is-progress {
+    clip: rect(0, 384px, 768px, 0);
+    border: 32px solid var(--ion-color-secondary);
+  }
+  .is-time-text {
+    font-size: 192px;
+  }
+  .is-then-text {
+    font-size: 48px;
+    margin-top: 32px;
+    display: flex;
+  }
+  .is-container.is-middle-action {
+    width: 160px;
+    height: 160px;
+  }
+  .is-container.is-side-action {
+    width: 128px;
+    height: 128px;
+  }
+}
+
+/* container themes */
+
+.is-container.is-light {
+  background-color: var(--ion-color-light);
+}
+
+.is-container.is-dark {
+  background-color: var(--ion-color-dark);
+}
