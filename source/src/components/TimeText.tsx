@@ -1,10 +1,15 @@
 import * as React from 'react';
 
-import { Context, IContext } from '../context/context';
-
-import { IonText } from '@ionic/react';
+import { IonText, IonInput } from '@ionic/react';
 
 import { convertTime } from '../helpers/convertTime';
+import { connect } from 'react-redux';
+import { State } from '../interfaces/state';
+import { Time } from '../interfaces/time';
+
+import { Dispatch, AnyAction } from 'redux';
+import { UpdateTime } from '../interfaces/updateTime';
+import { updateTime } from '../helpers/updateTime';
 
 /**
  * @copyright OpenSourced
@@ -12,16 +17,25 @@ import { convertTime } from '../helpers/convertTime';
  * @description A component displaying converted time of the pomodoro cycle.
  * @version 0.1.0
  */
-export const TimeText = (): JSX.Element => (
-    <Context.Consumer>
-        {
-            (context: IContext): JSX.Element => (
-                <IonText mode='md' color='primary'>
-                    <h2 className='is-time-text'>
-                        {convertTime(context.time)}
-                    </h2>
-                </IonText>
-            ) as JSX.Element
-        }
-    </Context.Consumer>
-) as JSX.Element;
+export const TimeText = connect((state: State): {
+    time: Time;
+} => ({
+    time: state.time,
+}), null)(({ time }: {
+    time: Time;
+}): JSX.Element => {
+
+    React.useEffect((): void => {
+        console.log(time);
+    }, [time]);
+
+    return (
+        <IonText mode='md' color='primary'>
+            <h2 className='is-time-text ion-text-center'>
+                {
+                    convertTime(time)
+                }
+            </h2>
+        </IonText>
+    );
+});

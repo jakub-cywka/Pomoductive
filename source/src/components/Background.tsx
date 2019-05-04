@@ -1,40 +1,31 @@
 import * as React from 'react';
 
-import { Context, IContext } from '../context/context';
+import { connect } from 'react-redux';
+
+import { State } from '../interfaces/state';
+
+import { Theme } from '../enums/theme';
 
 /**
  * @copyright OpenSourced
  * @author Jakub Cywka
  * @description A wrapper component for a whole application.
- * @param props The props to use with this component.
- * @version 0.1.0
- */
-export const Background = (props: IProps): JSX.Element => (
-    <Context.Consumer>
-        {
-            (context: IContext): JSX.Element => (
-                <div className={`is-container is-fullsized is-${context.theme}`}>
-                    {props.children}
-                </div>
-            ) as JSX.Element
-        }
-    </Context.Consumer>
-) as JSX.Element;
-
-/**
- * @copyright OpenSourced
- * @author Jakub Cywka
- * @description An interface for Background component.
  * @param children The element to render inside of the Background component.
- * @version 0.1.0
+ * @version 0.2.0
  */
-export interface IProps {
-    /**
-     * @copyright OpenSourced
-     * @author Jakub Cywka
-     * @description A part of an interface for Background component.
-     * @param children The element to render inside of the Background component.
-     * @version 0.1.0
-    */ 
-    children: any;
-};
+export const Background = connect((state: State): {
+        theme: Theme;
+    } => ({
+        theme: state.theme
+    }), null)(({
+        theme,
+        children
+    }: {
+        theme: Theme;
+        children: any;
+    }): JSX.Element => (
+        <div className={`is-container is-fullsized is-${theme}`}>
+            {children}
+        </div>
+    )
+);

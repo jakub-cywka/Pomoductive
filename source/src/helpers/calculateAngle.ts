@@ -10,10 +10,10 @@ import { TimeType } from '../enums/timeType';
  * @param timeType The type of time (work or break) to use for calculations.
  * @version 0.1.0
 */
-export const calculateAngle = (time: Time, timeType: TimeType): number => {
+export const calculateAngle = (time: Time, timeType: TimeType, workTime: Time, breakTime: Time): number => {
     let targetAngle: number = 0;
 
-    targetAngle = (((timeType === TimeType.Work ? 25 : 5) * 60 - (time.minutes * 60 + time.seconds)) / ((timeType === TimeType.Work ? 25 : 5) * 60)) * 360;
+    targetAngle = (((timeType === TimeType.Work ? workTime.minutes : breakTime.minutes) * 60 - (time.minutes * 60 + time.seconds)) / ((timeType === TimeType.Work ? workTime.minutes : breakTime.minutes) * 60)) * 360;
     
     return targetAngle;
 };

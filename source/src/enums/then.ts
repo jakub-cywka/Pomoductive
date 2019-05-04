@@ -5,6 +5,6 @@
  * @version 0.1.0
 */
 export enum Then {
-    Work = '25 minute work',
-    Break = '5 minute break'
+    Work = 'minute work',
+    Break = 'minute break'
 };
