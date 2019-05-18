@@ -5,7 +5,8 @@ import { TimeType } from '../enums/timeType';
  * @author Jakub Cywka
  * @description An interface for payload to update the time type in the pomodoro lifecycle.
  * @param timeType Determines the timeType to use in update of time type in the pomodoro lifecycle.
- * @version 0.2.0
+ * @version 0.3.0
+ * @license MIT
 */
 export interface UpdateTimeType {
     /**
@@ -13,7 +14,8 @@ export interface UpdateTimeType {
      * @author Jakub Cywka
      * @description A part of an UpdateTimeType interface.
      * @param timeType Determines the timeType to use in update of time type in the pomodoro lifecycle.
-     * @version 0.2.0
+     * @version 0.3.0
+     * @license MIT
     */
     timeType: TimeType;
 };

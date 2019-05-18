@@ -1,12 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 
 import { calculateAngle } from '../helpers/calculateAngle';
 
 import { Theme } from '../enums/theme';
-
-import { connect } from 'react-redux';
-
 import { TimeType } from '../enums/timeType';
+
+import { connect, ConnectedComponentClass } from 'react-redux';
 
 import { State } from '../interfaces/state';
 import { Time } from '../interfaces/time';
@@ -15,10 +14,18 @@ import { Time } from '../interfaces/time';
  * @copyright OpenSourced
  * @author Jakub Cywka
  * @description A wrapper component for pomodoro circle.
- * @param props The props to use with this component.
- * @version 0.2.0
+ * @param children The children to render inside of the component.
+ * @version 0.3.0
+ * @license MIT
  */
-export const Circle = connect((state: State): {
+export const Circle: ConnectedComponentClass<({ timeType, time, theme, children, breakTime, workTime }: {
+    timeType: TimeType;
+    time: Time;
+    theme: Theme;
+    children: any;
+    breakTime: Time;
+    workTime: Time;
+}) => JSX.Element, Pick<any, string | number | symbol>> = connect((state: State): {
     timeType: TimeType;
     time: Time;
     theme: Theme;

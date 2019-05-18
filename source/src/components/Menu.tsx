@@ -1,33 +1,44 @@
-import * as React from 'react';
+import React from 'react';
 
-import { connect } from 'react-redux';
+import { connect, ConnectedComponentClass } from 'react-redux';
 
 import { State } from '../interfaces/state';
-import { Theme } from '../enums/theme';
-import { Dispatch, AnyAction } from 'redux';
 import { UpdateTheme } from '../interfaces/updateTheme';
-import { updateTheme } from '../helpers/updateTheme';
-import { IonMenu, IonHeader, IonTitle, IonToolbar, IonContent, IonListHeader, IonList, IonMenuToggle, IonItem, IonLabel, IonToggle, IonDatetime } from '@ionic/react';
-import { Time } from '../interfaces/time';
 import { UpdateBreakTime } from '../interfaces/updateBreakTime';
 import { UpdateWorkTime } from '../interfaces/updateWorkTime';
-import { updateBreakTime } from '../helpers/updateBreakTime';
-import { updateWorkTime } from '../helpers/updateWorkTime';
 import { UpdateTime } from '../interfaces/updateTime';
-import { updateTime } from '../helpers/updateTime';
+
+import { Dispatch, AnyAction } from 'redux';
+
+import { Theme } from '../enums/theme';
 import { TimeType } from '../enums/timeType';
 
-export const Menu = connect((state: State): {
+import { IonMenu, IonHeader, IonTitle, IonToolbar, IonContent, IonListHeader, IonList, IonMenuToggle, IonItem, IonLabel, IonToggle, IonDatetime } from '@ionic/react';
+
+import { updateTheme } from '../helpers/updateTheme';
+import { updateBreakTime } from '../helpers/updateBreakTime';
+import { updateWorkTime } from '../helpers/updateWorkTime';
+import { updateTime } from '../helpers/updateTime';
+
+/**
+ * @copyright OpenSourced
+ * @author Jakub Cywka
+ * @description A menu component for the pomodoro settings.
+ * @version 0.3.0
+ * @license MIT
+ */
+export const Menu: ConnectedComponentClass<({ theme, updateTheme, updateBreakTime, updateWorkTime, updateTime, timeType }: {
     theme: Theme;
-    breakTime: Time;
-    workTime: Time;
-    time: Time;
+    timeType: TimeType;
+    updateTheme: (payload: UpdateTheme) => AnyAction;
+    updateBreakTime: (payload: UpdateBreakTime) => AnyAction;
+    updateWorkTime: (payload: UpdateWorkTime) => AnyAction;
+    updateTime: (payload: UpdateTime) => AnyAction;
+}) => JSX.Element, Pick<any, string | number | symbol>> = connect((state: State): {
+    theme: Theme;
     timeType: TimeType;
 } => ({
     theme: state.theme,
-    breakTime: state.breakTime,
-    workTime: state.workTime,
-    time: state.time,
     timeType: state.timeType
 }), (dispatch: Dispatch<AnyAction>): {
     updateTheme: (payload: UpdateTheme) => AnyAction;
@@ -39,7 +50,14 @@ export const Menu = connect((state: State): {
     updateBreakTime: (payload: UpdateBreakTime): AnyAction => dispatch(updateBreakTime(payload)),
     updateWorkTime: (payload: UpdateWorkTime): AnyAction => dispatch(updateWorkTime(payload)),
     updateTime: (payload: UpdateTime): AnyAction => dispatch(updateTime(payload))
-}))(({ theme, updateTheme, breakTime, updateBreakTime, workTime, updateWorkTime, time, updateTime, timeType }: any): JSX.Element => {
+}))(({ theme, updateTheme, updateBreakTime, updateWorkTime, updateTime, timeType }: {
+    theme: Theme;
+    timeType: TimeType;
+    updateTheme: (payload: UpdateTheme) => AnyAction;
+    updateBreakTime: (payload: UpdateBreakTime) => AnyAction;
+    updateWorkTime: (payload: UpdateWorkTime) => AnyAction;
+    updateTime: (payload: UpdateTime) => AnyAction;
+}): JSX.Element => {
 
     const update: () => void = (): void => {
         updateTheme({
@@ -48,7 +66,6 @@ export const Menu = connect((state: State): {
     };
 
     const updateBreak = (event: any): void => {
-        console.log(event.currentTarget.value);
         updateBreakTime({
             breakTime: {
                 minutes: parseInt(event.currentTarget.value.substring(event.currentTarget.value.indexOf(':') + 1, event.currentTarget.value.indexOf(':') + 3)),
@@ -101,7 +118,7 @@ export const Menu = connect((state: State): {
                             <IonLabel mode='md'>
                                 Dark mode
                             </IonLabel>
-                            <IonToggle onIonChange={update} mode='md'></IonToggle>
+                            <IonToggle checked={theme === Theme.Dark} onIonChange={update} mode='md'></IonToggle>
                         </IonItem>
                     </IonMenuToggle>
                     <IonListHeader mode='md'>

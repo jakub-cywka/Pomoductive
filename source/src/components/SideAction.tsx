@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { IonSegmentButton } from '@ionic/react';
 
-import { connect } from 'react-redux';
+import { connect, ConnectedComponentClass } from 'react-redux';
 
 import { Dispatch, AnyAction } from 'redux';
 
@@ -23,15 +23,28 @@ import { updateId } from '../helpers/updateId';
 import { TimerState } from '../enums/timerState';
 import { TimeType } from '../enums/timeType';
 import { Then } from '../enums/then';
+import { Direction } from '../enums/direction';
 
 /**
  * @copyright OpenSourced
  * @author Jakub Cywka
  * @description A component that displays the side action button (forward or backward, depending on props).
- * @param props The props to use with this component.
- * @version 0.1.0
+ * @param direction The direction to use with that component.
+ * @version 0.3.0
  */
-export const SideAction = connect((state: State): {
+export const SideAction: ConnectedComponentClass<({ direction, updateTimerState, updateTimeType, updateThen, updateTime, timeType, then, workTime, breakTime, updateId, time }: {
+    direction: Direction;
+    timeType: TimeType;
+    then: Then;
+    workTime: Time;
+    breakTime: Time;
+    time: Time;
+    updateTimerState: (payload: UpdateTimerState) => AnyAction;
+    updateTimeType: (payload: UpdateTimeType) => AnyAction;
+    updateThen: (payload: UpdateThen) => AnyAction;
+    updateTime: (payload: UpdateTime) => AnyAction;
+    updateId: (payload: UpdateId) => AnyAction;
+}) => JSX.Element, Pick<any, string | number | symbol>> = connect((state: State): {
     timeType: TimeType;
     then: Then;
     workTime: Time;

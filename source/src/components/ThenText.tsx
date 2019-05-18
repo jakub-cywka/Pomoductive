@@ -14,7 +14,7 @@ import { Time } from '../interfaces/time';
  * @copyright OpenSourced
  * @author Jakub Cywka
  * @description A component displaying the upcoming cycle.
- * @version 0.1.0
+ * @version 0.3.0
 */
 export const ThenText = connect((state: State): {
     then: Then;

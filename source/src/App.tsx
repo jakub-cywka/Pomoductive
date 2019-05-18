@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { IonApp, IonSplitPane, IonPage, IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonListHeader, IonButtons, IonMenuButton, IonMenuToggle, IonItem, IonLabel, IonToggle } from '@ionic/react';
+import { IonApp, IonSplitPane, IonPage, IonButtons, IonMenuButton } from '@ionic/react';
 
 import { Circle } from './components/Circle';
 import { Background } from './components/Background';
@@ -16,8 +16,9 @@ import { Menu } from './components/Menu';
 /**
  * @copyright OpenSourced
  * @author Jakub Cywka
- * @description A root component of the whole app. Stores all of its logic and provides the state for all of the children components.
- * @version 0.2.0
+ * @description A root component of the whole Pomoductive app. Renders all of its children components.
+ * @version 0.3.0
+ * @license MIT
 */
 export const App: () => JSX.Element = (): JSX.Element => (
   <IonApp>

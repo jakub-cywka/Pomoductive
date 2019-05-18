@@ -15,7 +15,7 @@ import { updateTime } from '../helpers/updateTime';
  * @copyright OpenSourced
  * @author Jakub Cywka
  * @description A component displaying converted time of the pomodoro cycle.
- * @version 0.1.0
+ * @version 0.3.0
  */
 export const TimeText = connect((state: State): {
     time: Time;

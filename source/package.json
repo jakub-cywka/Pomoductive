@@ -2,7 +2,7 @@
   "name": "pomoductive",
   "description": "Help your productivity grow up with this powerful Pomodoro technique time tracker 🍅.",
   "author": "Jakub Cywka",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@ionic/core": "^4.3.1",

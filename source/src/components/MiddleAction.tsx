@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 
 import { IonSegmentButton } from '@ionic/react';
 
 import { TimerState } from '../enums/timerState';
 
-import { connect } from 'react-redux';
+import { connect, ConnectedComponentClass } from 'react-redux';
 
 import { UpdateTimerState } from '../interfaces/updateTimerState';
 import { State } from '../interfaces/state';
@@ -24,10 +24,18 @@ import { updateId } from '../helpers/updateId';
  * @copyright OpenSourced
  * @author Jakub Cywka
  * @description A component that displays the middle action button (resume or pause, depending on context).
- * @param props The props to use with this component. 
- * @version 0.1.0
+ * @version 0.3.0
+ * @license MIT
  */
-export const MiddleAction = connect((state: State): {
+export const MiddleAction: ConnectedComponentClass<({ timerState, updateTimerState, time, updateTime, id, updateId }: {
+    timerState: TimerState;
+    time: Time;
+    id: NodeJS.Timeout;
+    updateTimerState: (payload: UpdateTimerState) => AnyAction;
+    updateInterval: () => AnyAction;
+    updateTime: (payload: UpdateTime) => AnyAction;
+    updateId: (payload: UpdateId) => AnyAction;
+}) => JSX.Element, Pick<any, string | number | symbol>> = connect((state: State): {
     timerState: TimerState;
     time: Time;
     id: NodeJS.Timeout;
@@ -45,7 +53,7 @@ export const MiddleAction = connect((state: State): {
     updateInterval: (): AnyAction => dispatch(updateInterval() as unknown as AnyAction),
     updateTime: (payload: UpdateTime): AnyAction => dispatch(updateTime(payload)),
     updateId: (payload: UpdateId): AnyAction => dispatch(updateId(payload))
-}))(({ timerState, updateTimerState, updateInterval, time, updateTime, id, updateId }: any): JSX.Element => {
+}))(({ timerState, updateTimerState, time, updateTime, id, updateId }: any): JSX.Element => {
 
     const onClick = (): void => {
         updateTimerState({
