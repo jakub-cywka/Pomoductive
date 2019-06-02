@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { calculateAngle } from '../helpers/calculateAngle';
+import { calculateAngle } from '../functions/calculateAngle';
 
 import { Theme } from '../enums/theme';
 import { TimeType } from '../enums/timeType';

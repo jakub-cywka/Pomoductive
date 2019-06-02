@@ -9,7 +9,7 @@ import './index.css';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 
-import { App } from './App';
+import App from './App';
 
 import { Provider } from 'react-redux';
 

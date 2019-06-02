@@ -5,7 +5,7 @@ import { TimerState } from '../enums/timerState';
  * @author Jakub Cywka
  * @description An interface for payload to update the timer state in the pomodoro lifecycle.
  * @param timerState Determines the timerState to use in update of timer state in the pomodoro lifecycle.
- * @version 0.3.0
+ * @version 0.4.0
  * @license MIT
 */
 export interface UpdateTimerState {
@@ -14,7 +14,7 @@ export interface UpdateTimerState {
      * @author Jakub Cywka
      * @description A part of an UpdateTimerState interface.
      * @param timerState Determines the timerState to use in update of timer state in the pomodoro lifecycle.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     timerState: TimerState;

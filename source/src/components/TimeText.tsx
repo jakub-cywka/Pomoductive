@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import { IonText, IonInput } from '@ionic/react';
 
-import { convertTime } from '../helpers/convertTime';
+import { convertTime } from '../functions/convertTime';
 import { connect } from 'react-redux';
 import { State } from '../interfaces/state';
 import { Time } from '../interfaces/time';
 
 import { Dispatch, AnyAction } from 'redux';
 import { UpdateTime } from '../interfaces/updateTime';
-import { updateTime } from '../helpers/updateTime';
+import { updateTime } from '../functions/updateTime';
 
 /**
  * @copyright OpenSourced
@@ -24,10 +24,6 @@ export const TimeText = connect((state: State): {
 }), null)(({ time }: {
     time: Time;
 }): JSX.Element => {
-
-    React.useEffect((): void => {
-        console.log(time);
-    }, [time]);
 
     return (
         <IonText mode='md' color='primary'>

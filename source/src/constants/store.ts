@@ -8,4 +8,6 @@ import { State } from '../interfaces/state';
 
 import { reducer } from './reducer';
 
-export const store: Store<State, Action> = createStore(reducer, composeWithDevTools(applyMiddleware(ReduxThunk.default)));
+export const store: Store<State, Action> & {
+    dispatch: () => {}
+} = createStore(reducer, composeWithDevTools(applyMiddleware(ReduxThunk.default)));

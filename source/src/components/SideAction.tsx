@@ -14,11 +14,11 @@ import { State } from '../interfaces/state';
 import { Time } from '../interfaces/time';
 import { UpdateId } from '../interfaces/updateId';
 
-import { updateTimerState } from '../helpers/updateTimerState';
-import { updateThen } from '../helpers/updateThen';
-import { updateTime } from '../helpers/updateTime';
-import { updateTimeType } from '../helpers/updateTimeType';
-import { updateId } from '../helpers/updateId';
+import { updateTimerState } from '../functions/updateTimerState';
+import { updateThen } from '../functions/updateThen';
+import { updateTime } from '../functions/updateTime';
+import { updateTimeType } from '../functions/updateTimeType';
+import { updateId } from '../functions/updateId';
 
 import { TimerState } from '../enums/timerState';
 import { TimeType } from '../enums/timeType';

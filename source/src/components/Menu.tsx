@@ -15,10 +15,10 @@ import { TimeType } from '../enums/timeType';
 
 import { IonMenu, IonHeader, IonTitle, IonToolbar, IonContent, IonListHeader, IonList, IonMenuToggle, IonItem, IonLabel, IonToggle, IonDatetime } from '@ionic/react';
 
-import { updateTheme } from '../helpers/updateTheme';
-import { updateBreakTime } from '../helpers/updateBreakTime';
-import { updateWorkTime } from '../helpers/updateWorkTime';
-import { updateTime } from '../helpers/updateTime';
+import { updateTheme } from '../functions/updateTheme';
+import { updateBreakTime } from '../functions/updateBreakTime';
+import { updateWorkTime } from '../functions/updateWorkTime';
+import { updateTime } from '../functions/updateTime';
 
 /**
  * @copyright OpenSourced

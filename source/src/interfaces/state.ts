@@ -4,6 +4,14 @@ import { Then } from '../enums/then';
 import { TimerState } from '../enums/timerState';
 import { Theme } from '../enums/theme';
 import { TimeType } from '../enums/timeType';
+import { RequestState } from '../enums/requestState';
+
+import Firebase from 'firebase/app';
+
+import 'firebase/auth';
+import 'firebase/firestore';
+
+import { User } from './user';
 
 /**
  * @copyright OpenSourced
@@ -17,7 +25,8 @@ import { TimeType } from '../enums/timeType';
  * @param workTime Determines the amount of work time.
  * @param breakTime Determines the amount of break time.
  * @param id Determines the id of a pomodoro lifecycle.
- * @version 0.3.0
+ * @param firebase The Firebase instance to use in the app.
+ * @version 0.4.0
  * @license MIT
 */
 export interface State {
@@ -26,7 +35,7 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param time Sets the time of pomodoro cycle.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     time: Time;
@@ -35,7 +44,7 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param then The text to display below the pomodoro's circle.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     then: Then;
@@ -44,7 +53,7 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param timerState The state of pomodoro cycle.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     timerState: TimerState;
@@ -53,7 +62,7 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param theme Determines the theme that the components will use.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     theme: Theme;
@@ -62,7 +71,7 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param timeType The type of time to use (work or break one).
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     timeType: TimeType;
@@ -71,7 +80,7 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param workTime Determines the amount of work time.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     workTime: Time;
@@ -80,7 +89,7 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param breakTime Determines the amount of break time.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     breakTime: Time;
@@ -89,8 +98,19 @@ export interface State {
      * @author Jakub Cywka
      * @description A part of an State interface.
      * @param id Determines the id of a pomodoro lifecycle.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     id: NodeJS.Timeout;
+    /**
+     * @copyright OpenSourced
+     * @author Jakub Cywka
+     * @description A part of an State interface.
+     * @param firebase The Firebase instance to use in the app.
+     * @version 0.4.0
+     * @license MIT
+    */
+    firebase: typeof Firebase;
+    requestState: RequestState;
+    user: User;
 };

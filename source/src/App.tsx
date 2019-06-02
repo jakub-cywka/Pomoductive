@@ -2,16 +2,14 @@ import * as React from 'react';
 
 import { IonApp, IonSplitPane, IonPage, IonButtons, IonMenuButton } from '@ionic/react';
 
-import { Circle } from './components/Circle';
 import { Background } from './components/Background';
-import { TimeText } from './components/TimeText';
-import { ThenText } from './components/ThenText';
-import { MiddleAction } from './components/MiddleAction';
-import { SideAction } from './components/SideAction';
-import { Actions } from './components/Actions';
-
-import { Direction } from './enums/direction';
 import { Menu } from './components/Menu';
+
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+
+import Home from './pages/Home';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 /**
  * @copyright OpenSourced
@@ -20,7 +18,7 @@ import { Menu } from './components/Menu';
  * @version 0.3.0
  * @license MIT
 */
-export const App: () => JSX.Element = (): JSX.Element => (
+export default (): JSX.Element => (
   <IonApp>
     <Background>
       <IonSplitPane when='(max-width: 0px)' contentId='main'>
@@ -29,19 +27,14 @@ export const App: () => JSX.Element = (): JSX.Element => (
           <IonButtons color='primary'>
             <IonMenuButton mode='md' color='primary'></IonMenuButton>
           </IonButtons>
-          <Background>
-            <Circle>
-              <TimeText />
-              <ThenText />
-            </Circle>
-            <div style={{marginTop: '32px'}}>
-              <Actions>
-                <SideAction direction={Direction.Backward} />
-                <MiddleAction />
-                <SideAction direction={Direction.Forward} />
-              </Actions>
-            </div>
-          </Background>
+          <BrowserRouter>
+            <Route path='/home' component={Home} />
+            <Route path='/register' component={Register} />
+            <Route path='/login' component={Login} />
+            <Switch>
+              <Redirect to='/login' path='/' exact />
+            </Switch>
+          </BrowserRouter>
         </IonPage>
       </IonSplitPane>
     </Background>

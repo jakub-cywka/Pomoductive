@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 
-import { connect, ConnectedComponentClass } from 'react-redux';
+import { connect } from 'react-redux';
 
 import { State } from '../interfaces/state';
 
 import { Theme } from '../enums/theme';
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
+    theme: Theme;
+};
+
+const mapStateToProps: (state: State) => ({
+    theme: Theme;
+}) = state => ({
+    theme: state.theme
+});
 
 /**
  * @copyright OpenSourced
@@ -14,22 +24,8 @@ import { Theme } from '../enums/theme';
  * @version 0.3.0
  * @license MIT
  */
-export const Background: ConnectedComponentClass<({ theme, children }: {
-    theme: Theme;
-    children: any;
-}) => JSX.Element, Pick<any, string | number | symbol>> = connect((state: State): {
-    theme: Theme;
-} => ({
-    theme: state.theme
-}), null)(({
-    theme,
-    children
-}: {
-    theme: Theme;
-    children: any;
-}): JSX.Element => (
-        <div className={`is-container is-fullsized is-${theme}`}>
-            {children}
-        </div>
-    )
-);
+export const Background = connect(mapStateToProps, () => ({}))(({ ...attributes }: Props) => (
+    <div {...attributes} className={`is-container is-fullsized is-${attributes.theme}`}>
+        {attributes.children}
+    </div>
+));

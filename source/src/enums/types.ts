@@ -7,5 +7,7 @@ export enum Types {
     UpdateWorkTime = 'updateWorkTime',
     UpdateBreakTime = 'updateBreakTime',
     UpdateInterval = 'updateInterval',
-    UpdateId = 'UpdateId'
+    UpdateId = 'updateId',
+    UpdateRequestState = 'updateRequestState',
+    UpdateUser = 'updateUser'
 }

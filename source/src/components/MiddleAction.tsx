@@ -13,12 +13,12 @@ import { UpdateTime } from '../interfaces/updateTime';
 
 import { Dispatch, AnyAction } from 'redux';
 
-import { updateTimerState } from '../helpers/updateTimerState';
-import { calculateTime } from '../helpers/calculateTime';
-import { updateTime } from '../helpers/updateTime';
-import { updateInterval } from '../helpers/updateInterval';
+import { updateTimerState } from '../functions/updateTimerState';
+import { calculateTime } from '../functions/calculateTime';
+import { updateTime } from '../functions/updateTime';
+import { updateInterval } from '../functions/updateInterval';
 import { UpdateId } from '../interfaces/updateId';
-import { updateId } from '../helpers/updateId';
+import { updateId } from '../functions/updateId';
 
 /**
  * @copyright OpenSourced

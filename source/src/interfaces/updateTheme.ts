@@ -5,7 +5,7 @@ import { Theme } from '../enums/theme';
  * @author Jakub Cywka
  * @description An interface for payload to update the them in the pomodoro lifecycle.
  * @param theme Determines the theme to use in update of theme in the pomodoro lifecycle.
- * @version 0.3.0
+ * @version 0.4.0
  * @license MIT
 */
 export interface UpdateTheme {
@@ -14,7 +14,7 @@ export interface UpdateTheme {
      * @author Jakub Cywka
      * @description A part of an UpdateTheme interface.
      * @param theme Determines the theme to use in update of theme in the pomodoro lifecycle.
-     * @version 0.3.0
+     * @version 0.4.0
      * @license MIT
     */
     theme: Theme;
