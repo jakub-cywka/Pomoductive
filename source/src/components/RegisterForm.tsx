@@ -24,10 +24,21 @@ const Alert = lazy(() => import('./Alert'));
 import { FormikField } from './FormikField';
 import { FormItem } from './FormItem';
 import { FormLabel } from './FormLabel';
+import { PasswordFormItem } from './PasswordFormItem';
 
-import { Link } from 'react-router-dom';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
+
+import * as Yup from 'yup';
+
+const SignUpSchema = Yup.object().shape({
+    name: Yup.string().notRequired(),
+    surname: Yup.string().notRequired(),
+    email: Yup.string().required('Email is required.').email('Must be email-like.').lowercase('Must be lower case.'),
+    password: Yup.string().required('Password is required.').min(8, 'Password is too short.').max(25, 'Password is too long.')
+});
 
 import firebase from 'firebase';
+import { FormikError } from './FormikError';
 
 interface MapStateToProps {
     user: User;
@@ -53,113 +64,62 @@ const mapDispatchToProps: (dispatch: Dispatch<Action>) => MapDispatchToProps = d
     registerUserWithOAuth2: (userCredential: firebase.auth.UserCredential) => dispatch(registerUserWithOAuth2(userCredential) as unknown as Action)
 });
 
-const RegisterFormContainer: ({ user, updateUser, registerUserWithEmail, firebase, registerUserWithOAuth2 }: Props) => JSX.Element = ({ user, updateUser, registerUserWithEmail, registerUserWithOAuth2, firebase }) => {
+const RegisterFormContainer: ({ user, updateUser, registerUserWithEmail, firebase, registerUserWithOAuth2, history }: Props & RouteComponentProps) => JSX.Element = ({ user, updateUser, registerUserWithEmail, registerUserWithOAuth2, firebase, history }) => {
 
-    const [shouldAlertAppear, setShouldAlertAppear] = useState(null as unknown as boolean);
-
-    function onFormikSubmit(values: FormUser, formikActions: FormikActions<FormUser>): void {
-
+    function onFormikSubmit(values: FormUser, formikActions: FormikActions<FormUser>) {
         formikActions.setSubmitting(false);
+        
+        updateUser({
+            ...user,
+            ...values
+        });
 
-        setShouldAlertAppear(true);
+        registerUserWithEmail();
 
-        if (values.email === '') {
-            formikActions.setStatus({
-                message: 'Email field needs to be filled.',
-                status: FormMessageStatus.Error
-            } as FormStatus);
-        };
-        if (values.password === '') {
-            formikActions.setStatus({
-                message: 'Password field needs to be filled.',
-                status: FormMessageStatus.Error
-            } as FormStatus);
-        };
-        if (values.email === '' && values.password === '') {
-            formikActions.setStatus({
-                message: 'Both email and password field needs to be filled.',
-                status: FormMessageStatus.Error
-            } as FormStatus);
-        };
-        if (values.password.length < 8) {
-            formikActions.setStatus({
-                message: 'Password is too short (minimum 8 letters length).',
-                status: FormMessageStatus.Error
-            } as FormStatus);
-        };
-        if (values.email !== '' && values.password !== '' && values.password.length >= 8) {
-            formikActions.setStatus({
-                message: 'Everything\'s good!',
-                status: FormMessageStatus.Success
-            } as FormStatus);
-
-            updateUser({
-                ...user,
-                ...values
-            });
-
-            registerUserWithEmail();
-        };
+        history.push('/home');
     };
-
-    useEffect(() => {
-        setShouldAlertAppear(false);
-    }, []);
 
     return (
         <>
-            <Formik onSubmit={onFormikSubmit} initialValues={user as FormUser}>
-                {({status}): JSX.Element => (
-                    <div style={{flexDirection: 'column'}}>
-                        {
-                            shouldAlertAppear === true ? (
-                                <Suspense fallback={<h1>Loading...</h1>}>
-                                    <Alert class='ion-padding' mode='md' color={status !== undefined ? status.status === FormMessageStatus.Success ? 'success' : 'warning' : undefined}>
-                                        {status !== undefined ? status.message : null}
-                                    </Alert>
-                                </Suspense>
-                            ) : null
-                        }
-                        <Form className='ion-margin-vertical' style={{flexDirection: 'column', display: 'flex'}}>
-                            <IonItemGroup>
-                                <FormItem button={true} class='ion-margin-vertical' color='tertiary'>
-                                    <FormLabel>
-                                        First name
-                                    </FormLabel>
-                                    <FormikField autocomplete='on' name='name' type='text' />
-                                </FormItem>
-                                <FormItem button={true} class='ion-margin-vertical' color='tertiary'>
-                                    <FormLabel>
-                                        Surname
-                                    </FormLabel>
-                                    <FormikField autocomplete='on' name='surname' type='text' />
-                                </FormItem>
-                                <FormItem button={true} class='ion-margin-vertical'>
-                                    <FormLabel>
-                                        Email*
-                                    </FormLabel>
-                                    <FormikField autocomplete='on' name='email' type='email' />
-                                </FormItem>
-                                <FormItem button={true} class='ion-margin-vertical'>
-                                    <FormLabel>
-                                        Password*
-                                    </FormLabel>
-                                    <FormikField autocomplete='on' name='password' type='password' />
-                                </FormItem>
-                            </IonItemGroup>
-                            <IonText>Have an account already? Sign in <Link to='/login' style={{textDecoration: 'none'}}>here</Link></IonText>
-                            <IonNote color='secondary' mode='md' class='ion-text-start ion-margin-top'>
-                                *required
-                            </IonNote>
-                            <IonButton color='primary' class='ion-margin-top' type='submit'>
-                                Register me!
-                            </IonButton>
-                        </Form>
-                    </div>
+            <Formik validationSchema={SignUpSchema} onSubmit={onFormikSubmit} initialValues={user as FormUser}>
+                {(): JSX.Element => (
+                    <Form className='ion-margin-vertical' style={{flexDirection: 'column', display: 'flex'}}>
+                        <IonItemGroup>
+                            <FormikError name='name' />
+                            <FormItem class='ion-margin-vertical' color='tertiary'>
+                                <FormLabel>
+                                    First name
+                                </FormLabel>
+                                <FormikField autocomplete='on' name='name' type='text' />
+                            </FormItem>
+                            <FormikError name='surname' />
+                            <FormItem class='ion-margin-vertical' color='tertiary'>
+                                <FormLabel>
+                                    Surname
+                                </FormLabel>
+                                <FormikField autocomplete='on' name='surname' type='text' />
+                            </FormItem>
+                            <FormikError name='email' />
+                            <FormItem class='ion-margin-vertical'>
+                                <FormLabel>
+                                    Email*
+                                </FormLabel>
+                                <FormikField autocomplete='on' name='email' type='email' />
+                            </FormItem>
+                            <PasswordFormItem labelText='Password*' autocomplete='on' />
+                        </IonItemGroup>
+                        <IonText>Have an account already? Sign in <Link to='/login' style={{textDecoration: 'none'}}>here</Link></IonText>
+                        <IonNote color='secondary' mode='md' class='ion-text-start ion-margin-top'>
+                            *required
+                        </IonNote>
+                        <IonButton color='primary' class='ion-margin-top' type='submit'>
+                            Register me!
+                        </IonButton>
+                    </Form>
                 )}
             </Formik>
         </>
     );  
 };
 
-export const RegisterForm = connect(mapStateToProps, mapDispatchToProps)(RegisterFormContainer);
+export const RegisterForm = withRouter(connect(mapStateToProps, mapDispatchToProps)(RegisterFormContainer) as any);

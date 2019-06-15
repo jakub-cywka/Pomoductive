@@ -1,15 +1,26 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 
-import { IonApp, IonSplitPane, IonPage, IonButtons, IonMenuButton } from '@ionic/react';
-
-import { Background } from './components/Background';
-import { Menu } from './components/Menu';
-
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter, RouteComponentProps } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
+
+import { Action } from './interfaces/action';
+import { State } from './interfaces/state';
+
+import { Dispatch } from 'redux';
+
+import { loginUserWithEmail } from './functions/loginUserWithEmail';
+import { updateUser } from './functions/updateUser';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { initialState } from './constants/initialState';
+
+import { RequestState } from './enums/requestState';
+
+import { IonSpinner } from '@ionic/react';
 
 /**
  * @copyright OpenSourced
@@ -18,25 +29,49 @@ import Login from './pages/Login';
  * @version 0.3.0
  * @license MIT
 */
-export default (): JSX.Element => (
-  <IonApp>
-    <Background>
-      <IonSplitPane when='(max-width: 0px)' contentId='main'>
-        <Menu />
-        <IonPage id='main'>
-          <IonButtons color='primary'>
-            <IonMenuButton mode='md' color='primary'></IonMenuButton>
-          </IonButtons>
-          <BrowserRouter>
+export const App: ({ history }: RouteComponentProps) => JSX.Element = ({ history }) => {
+
+  const dispatch: Dispatch<Action> = useDispatch();
+  const requestState = useSelector<State, RequestState>(state => state.requestState);
+  
+  useEffect((): void => {
+
+    const email = localStorage.getItem('email');
+    const password = localStorage.getItem('password');
+    
+    if (email !== undefined && email !== null && password !== undefined && password !== null) {
+      dispatch(updateUser({
+        user: {
+          ...initialState.user,
+          email,
+          password
+        }
+      }));
+      dispatch(loginUserWithEmail(true) as unknown as Action);
+      history.push('/home');
+    };
+  }, []);
+
+  return (
+    <>
+      {
+        requestState === RequestState.Pending ? (
+          <div style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <IonSpinner color='primary' style={{'width': '64px', 'height': '64px'}} name='crescent' />
+          </div>
+        ) : requestState === RequestState.Resolved ? (
+          <>
             <Route path='/home' component={Home} />
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />
             <Switch>
               <Redirect to='/login' path='/' exact />
             </Switch>
-          </BrowserRouter>
-        </IonPage>
-      </IonSplitPane>
-    </Background>
-  </IonApp>
-);
+          </>
+        ) : null
+      }
+    </>
+  );
+};
+
+export default withRouter(App);

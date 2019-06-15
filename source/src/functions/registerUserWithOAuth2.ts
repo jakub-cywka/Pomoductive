@@ -5,8 +5,13 @@ import { State } from '../interfaces/state';
 import { User } from '../interfaces/user';
 
 import { updateUser } from './updateUser';
+import { updateRequestState } from './updateRequestState';
+
+import { RequestState } from '../enums/requestState';
 
 export const registerUserWithOAuth2: (userCredential: firebase.auth.UserCredential) => (dispatch: Dispatch<Action>, getState: () => State) => Promise<void> = userCredential => async (dispatch, getState) => {
+
+    dispatch(updateRequestState({ requestState: RequestState.Pending }));
 
     async function getUsers(): Promise<User[]> { 
         const users = await firebase.firestore().collection('users').get().then((value): Array<User> => {
@@ -54,7 +59,8 @@ export const registerUserWithOAuth2: (userCredential: firebase.auth.UserCredenti
                 dispatch(updateUser({
                     user: value.data() as User
                 }));
-            });
+                dispatch(updateRequestState({ requestState: RequestState.Resolved }));
+            }).catch(() => dispatch(updateRequestState({ requestState: RequestState.Rejected })));
         });
     };
 };

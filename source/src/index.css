@@ -186,16 +186,16 @@ html, body, #root {
 
 .is-triangle-icon.is-forward {
   transform: rotate(-90deg) skewX(-30deg) scale(1, .866);
-  right: 3.125%;
+  right: 2.5%;
 }
 
 .is-triangle-icon.is-forward, .is-triangle-icon.is-backward {
-  bottom: 6.25%;
+  bottom: 5%;
 }
 
 .is-triangle-icon.is-backward {
   transform: rotate(-30deg) skewX(-30deg) scale(1, .866);
-  left: 3.125%;
+  left: 2.5%;
 }
 
 .is-triangle-icon::before, .is-triangle-icon::after {
@@ -579,6 +579,6 @@ html, body, #root {
   background-color: var(--ion-color-dark);
 }
 
-ion-item.ion-item-rounded {
-  border-radius: 16px !important;
+.ion-item-rounded {
+  --border-radius: 4px !important;
 }

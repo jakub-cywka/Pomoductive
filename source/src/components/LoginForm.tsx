@@ -1,4 +1,4 @@
-import React, { useState, lazy, useEffect, Suspense } from 'react';
+import React, { useState, lazy, useEffect, Suspense, SetStateAction, Dispatch as ReactDispatch } from 'react';
 
 import { connect } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { User } from '../interfaces/user';
 import { Action } from '../interfaces/action';
 import { FormStatus } from '../interfaces/formStatus';
 
-import { Dispatch } from 'redux';
+import { Dispatch as ReduxDispatch } from 'redux';
 
 import { updateUser } from '../functions/updateUser';
 import { loginUserWithEmail } from '../functions/loginUserWithEmail';
@@ -18,16 +18,21 @@ import { Formik, FormikActions, Form } from 'formik';
 import { FormMessageStatus } from '../enums/formMessageStatus';
 import { Theme } from '../enums/theme';
 
-import { IonItemGroup, IonButton, IonText } from '@ionic/react';
+import { IonItemGroup, IonButton, IonText, IonCheckbox, IonItem, IonLabel } from '@ionic/react';
+import { CheckboxChangeEventDetail } from '@ionic/core';
 
 import { FormItem } from './FormItem';
 import { FormLabel } from './FormLabel';
 import { FormikField } from './FormikField';
 const Alert = lazy(() => import('./Alert'));
+import { PasswordFormItem } from './PasswordFormItem';
+import { FormikError } from './FormikError';
 
 import { StyledFirebaseAuth } from 'react-firebaseui';
 
-import { Link } from 'react-router-dom';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
+
+import * as Yup from 'yup';
 
 import firebase from 'firebase';
 
@@ -36,10 +41,15 @@ interface MapStateToProps {
     theme: Theme;
 };
 
+const SignInSchema = Yup.object().shape({
+    email: Yup.string().required('Email is required.').email('Must be email-like.').lowercase('Must be lower case.'),
+    password: Yup.string().required('Password is required.').min(8, 'Password is too short.').max(25, 'Password is too long.')
+});
+
 interface MapDispatchToProps {
     updateUser: (user: User) => Action;
-    loginUserWithEmail: () => Action;
-    loginUserWithOAuth2: (userCredential: firebase.auth.UserCredential) => Action;
+    loginUserWithEmail: (shouldKeepLoggedIn: boolean) => Action;
+    loginUserWithOAuth2: (userCredential: firebase.auth.UserCredential, shouldKeepLoggedIn: boolean) => Action;
 };
 
 interface Props extends MapStateToProps, MapDispatchToProps {  };
@@ -49,92 +59,59 @@ const mapStateToProps: (state: State) => MapStateToProps = state => ({
     theme: state.theme
 });
 
-const mapDispatchToProps: (dispatch: Dispatch<Action>) => MapDispatchToProps = dispatch => ({
+const mapDispatchToProps: (dispatch: ReduxDispatch<Action>) => MapDispatchToProps = dispatch => ({
     updateUser: user => dispatch(updateUser({ user })),
-    loginUserWithEmail: () => dispatch(loginUserWithEmail() as unknown as Action),
-    loginUserWithOAuth2: userCredential => dispatch(loginUserWithOAuth2(userCredential) as unknown as Action)
+    loginUserWithEmail: shouldKeepLoggedIn => dispatch(loginUserWithEmail(shouldKeepLoggedIn) as unknown as Action),
+    loginUserWithOAuth2: (userCredential, shouldKeepLoggedIn) => dispatch(loginUserWithOAuth2(userCredential, shouldKeepLoggedIn) as unknown as Action)
 });
 
-export const LoginFormContainer: ({ user, updateUser, loginUserWithEmail, loginUserWithOAuth2, theme }: Props) => JSX.Element = ({ user, updateUser, loginUserWithEmail, loginUserWithOAuth2, theme }) => {
+export const LoginFormContainer: ({ user, updateUser, loginUserWithEmail, loginUserWithOAuth2, theme, history }: Props & RouteComponentProps) => JSX.Element = ({ user, updateUser, loginUserWithEmail, loginUserWithOAuth2, theme, history }) => {
+    const [shouldKeepLoggedIn, setShouldKeepLoggedIn] = useState(false);
 
-    const [shouldAlertAppear, setShouldAlertAppear] = useState(null as unknown as boolean);
-
-    useEffect(() => {
-        setShouldAlertAppear(true);
-    }, []);
+    function toggleShouldKeepLoggedIn(event: CustomEvent<CheckboxChangeEventDetail>) {
+        setShouldKeepLoggedIn(event.detail.checked);
+    };
 
     function onFormikSubmit(values: User, formikActions: FormikActions<User>): void {
-
         formikActions.setSubmitting(false);
+        updateUser(values);
+        loginUserWithEmail(shouldKeepLoggedIn);
+        history.push('/home');
+    };
 
-        setShouldAlertAppear(true);
-
-        if (values.email === '') {
-            formikActions.setStatus({
-                message: 'Email field needs to be filled.',
-                status: FormMessageStatus.Error
-            } as FormStatus);
-        };
-        if (values.password === '') {
-            formikActions.setStatus({
-                message: 'Password field needs to be filled.',
-                status: FormMessageStatus.Error
-            } as FormStatus);
-        };
-        if (values.password.length < 8) {
-            formikActions.setStatus({
-                message: 'Password is too short (must be minimum 8 symbols length).',
-                status: FormMessageStatus.Error
-            } as FormStatus);
-        };
-        if (values.email !== '' && values.password !== '') {
-            formikActions.setStatus({
-                message: 'Everything\'s good!',
-                status: FormMessageStatus.Success
-            } as FormStatus);
-
-            updateUser(values);
-
-            loginUserWithEmail();
-        };
+    function signAsGuest() {
+        history.push('/home');
     };
 
     return (
         <>
-            <Formik initialValues={user} onSubmit={onFormikSubmit}>
-                {({status}): JSX.Element => (
-                    <div style={{flexDirection: 'column'}}>
-                        {
-                            shouldAlertAppear === true ? (
-                                <Suspense fallback={<h1>Loading...</h1>}>
-                                    <Alert class='ion-padding' color={status !== undefined ? status.status === FormMessageStatus.Success ? 'success' : 'warning' : undefined} mode='md'>
-                                        {status !== undefined ? status.message : null}
-                                    </Alert>
-                                </Suspense>
-                            ) : null
-                        }
-                        <Form className='ion-margin-vertical' style={{flexDirection: 'column', display: 'flex'}}>
-                            <IonItemGroup>
-                                <FormItem class='ion-margin-vertical' color='primary' mode='md'>
-                                    <FormLabel>
-                                        Email
-                                    </FormLabel>
-                                    <FormikField type='email' name='email' />
-                                </FormItem>
-                                <FormItem class='ion-margin-vertical' color='primary' mode='md'>
-                                    <FormLabel>
-                                        Password
-                                    </FormLabel>
-                                    <FormikField type='password' name='password' />
-                                </FormItem>
-                            </IonItemGroup>
-                            <IonText color={theme === Theme.Light ? Theme.Dark : Theme.Light}>Don't have an account yet? Sign up <Link to='/register' style={{textDecoration: 'none'}}>here</Link></IonText>
-                            <IonText color={theme === Theme.Light ? Theme.Dark : Theme.Light}>If you don't want an account, jump <Link to='/home' style={{textDecoration: 'none'}}>here</Link></IonText>
-                            <IonButton class='ion-margin-top' color='primary' type='submit'>
-                                Login me!
-                            </IonButton>
-                        </Form>
-                    </div>
+            <Formik validationSchema={SignInSchema} initialValues={user} onSubmit={onFormikSubmit}>
+                {(): JSX.Element => (
+                    <Form className='ion-margin-vertical' style={{flexDirection: 'column', display: 'flex'}}>
+                        <IonItemGroup>
+                            <FormikError name='email' />
+                            <FormItem class='ion-margin-vertical' color='primary'>
+                                <FormLabel>
+                                    Email
+                                </FormLabel>
+                                <FormikField type='email' name='email' />
+                            </FormItem>
+                            <PasswordFormItem />
+                            <IonItem color={theme} lines='none' mode='md'>
+                                <IonCheckbox onIonChange={toggleShouldKeepLoggedIn} mode='md' checked={shouldKeepLoggedIn} />
+                                <IonLabel class='ion-margin-start' mode='md'>
+                                    Keep me signed in
+                                </IonLabel>
+                            </IonItem>
+                        </IonItemGroup>
+                        <IonText color={theme === Theme.Light ? Theme.Dark : Theme.Light}>Don't have an account yet? Sign up <Link to='/register' style={{textDecoration: 'none'}}>here</Link></IonText>
+                        <IonButton class='ion-margin-top' color='primary' type='submit'>
+                            Login me!
+                        </IonButton>
+                        <IonButton onClick={signAsGuest} class='ion-margin-top' color='tertiary'>
+                            Use without an account
+                        </IonButton>
+                    </Form>
                 )}
             </Formik>
             <StyledFirebaseAuth uiConfig={{
@@ -146,14 +123,15 @@ export const LoginFormContainer: ({ user, updateUser, loginUserWithEmail, loginU
                     firebase.auth.FacebookAuthProvider.PROVIDER_ID
                 ],
                 callbacks: {
-                    signInSuccessWithAuthResult(authResult: firebase.auth.UserCredential): boolean {
-                        loginUserWithOAuth2(authResult);
+                    signInSuccessWithAuthResult(authResult: firebase.auth.UserCredential) {
+                        loginUserWithOAuth2(authResult, shouldKeepLoggedIn);
+                        history.push('/home');
                         return false;
-                    }
+                    },
                 }
             }} firebaseAuth={firebase.auth()} />
         </>
     );
 };
 
-export const LoginForm = connect(mapStateToProps, mapDispatchToProps)(LoginFormContainer);
+export const LoginForm = withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginFormContainer) as any);

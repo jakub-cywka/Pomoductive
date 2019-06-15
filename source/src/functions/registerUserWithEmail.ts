@@ -7,8 +7,13 @@ import { User } from '../interfaces/user';
 import { User as FirebaseUser } from 'firebase';
 
 import { updateUser } from './updateUser';
+import { updateRequestState } from './updateRequestState';
+
+import { RequestState } from '../enums/requestState';
 
 export const registerUserWithEmail: () => (dispatch: Dispatch<Action>, getState: () => State) => void = () => (dispatch, getState) => {
+
+    dispatch(updateRequestState({ requestState: RequestState.Pending }));
 
     const { firebase, user } = getState();
 
@@ -47,8 +52,9 @@ export const registerUserWithEmail: () => (dispatch: Dispatch<Action>, getState:
                         dispatch(updateUser({
                             user: value.data() as User
                         }));
+                        dispatch(updateRequestState({ requestState: RequestState.Resolved }));
                     });
-                });
+                }).catch(() => dispatch(updateRequestState({ requestState: RequestState.Rejected })));
             };
         });
     });

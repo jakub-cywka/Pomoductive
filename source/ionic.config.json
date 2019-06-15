@@ -1,0 +1,7 @@
+{
+  "name": "Pomoductive",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

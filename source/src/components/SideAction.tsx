@@ -25,6 +25,10 @@ import { TimeType } from '../enums/timeType';
 import { Then } from '../enums/then';
 import { Direction } from '../enums/direction';
 
+import { Plugins } from '@capacitor/core';
+
+const { LocalNotifications } = Plugins;
+
 /**
  * @copyright OpenSourced
  * @author Jakub Cywka
@@ -89,8 +93,23 @@ export const SideAction: ConnectedComponentClass<({ direction, updateTimerState,
     };
 
     React.useEffect((): void => {
+
+        const scheduleNotification = async () => {
+            await LocalNotifications.schedule({
+                notifications: [
+                    {
+                        title: 'Time over!',
+                        body: `The ${timeType} time is over, so we'll switch you to ${timeType === TimeType.Work ? TimeType.Break : TimeType.Work} time now :)`,
+                        id: 0,
+                        schedule: { at: new Date(Date.now()) }
+                    }
+                ]
+            });
+        };
+
         if (time.minutes === 0 && time.seconds === 0) {
             onClick();
+            scheduleNotification();
         };
     }, [time])
 

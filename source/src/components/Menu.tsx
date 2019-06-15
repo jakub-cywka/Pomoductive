@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { connect, ConnectedComponentClass } from 'react-redux';
 
@@ -13,12 +13,14 @@ import { Dispatch, AnyAction } from 'redux';
 import { Theme } from '../enums/theme';
 import { TimeType } from '../enums/timeType';
 
-import { IonMenu, IonHeader, IonTitle, IonToolbar, IonContent, IonListHeader, IonList, IonMenuToggle, IonItem, IonLabel, IonToggle, IonDatetime } from '@ionic/react';
+import { IonMenu, IonHeader, IonTitle, IonToolbar, IonContent, IonListHeader, IonList, IonMenuToggle, IonItem, IonLabel, IonToggle, IonDatetime, IonAlert } from '@ionic/react';
 
 import { updateTheme } from '../functions/updateTheme';
 import { updateBreakTime } from '../functions/updateBreakTime';
 import { updateWorkTime } from '../functions/updateWorkTime';
 import { updateTime } from '../functions/updateTime';
+import { ToggleChangeEventDetail } from '@ionic/core';
+import { RouteComponentProps, withRouter } from 'react-router';
 
 /**
  * @copyright OpenSourced
@@ -27,14 +29,7 @@ import { updateTime } from '../functions/updateTime';
  * @version 0.3.0
  * @license MIT
  */
-export const Menu: ConnectedComponentClass<({ theme, updateTheme, updateBreakTime, updateWorkTime, updateTime, timeType }: {
-    theme: Theme;
-    timeType: TimeType;
-    updateTheme: (payload: UpdateTheme) => AnyAction;
-    updateBreakTime: (payload: UpdateBreakTime) => AnyAction;
-    updateWorkTime: (payload: UpdateWorkTime) => AnyAction;
-    updateTime: (payload: UpdateTime) => AnyAction;
-}) => JSX.Element, Pick<any, string | number | symbol>> = connect((state: State): {
+const MenuContainer = connect((state: State): {
     theme: Theme;
     timeType: TimeType;
 } => ({
@@ -50,14 +45,14 @@ export const Menu: ConnectedComponentClass<({ theme, updateTheme, updateBreakTim
     updateBreakTime: (payload: UpdateBreakTime): AnyAction => dispatch(updateBreakTime(payload)),
     updateWorkTime: (payload: UpdateWorkTime): AnyAction => dispatch(updateWorkTime(payload)),
     updateTime: (payload: UpdateTime): AnyAction => dispatch(updateTime(payload))
-}))(({ theme, updateTheme, updateBreakTime, updateWorkTime, updateTime, timeType }: {
+}))(({ theme, updateTheme, updateBreakTime, updateWorkTime, updateTime, timeType, history }: {
     theme: Theme;
     timeType: TimeType;
     updateTheme: (payload: UpdateTheme) => AnyAction;
     updateBreakTime: (payload: UpdateBreakTime) => AnyAction;
     updateWorkTime: (payload: UpdateWorkTime) => AnyAction;
     updateTime: (payload: UpdateTime) => AnyAction;
-}): JSX.Element => {
+} & RouteComponentProps): JSX.Element => {
 
     const update: () => void = (): void => {
         updateTheme({
@@ -99,49 +94,97 @@ export const Menu: ConnectedComponentClass<({ theme, updateTheme, updateBreakTim
         };
     };
 
+    const [shouldClearLocalStorage, setShouldClearLocalStorage] = useState(false);
+
+    function toggleShouldClearLocalStorage(event: CustomEvent<ToggleChangeEventDetail>) {
+        setShouldClearLocalStorage(event.detail.checked);
+    };
+
     return (
-        <IonMenu side='start' swipeGesture={true} contentId='main'>
-            <IonHeader mode='md'>
-                <IonToolbar color='primary' mode='md'>
-                    <IonTitle>
-                        Settings
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent>
-                <IonList lines='none' mode='md'>
-                    <IonListHeader mode='md'>
-                        Theme
-                    </IonListHeader>
-                    <IonMenuToggle autoHide={false}>
-                        <IonItem mode='md'>
-                            <IonLabel mode='md'>
-                                Dark mode
-                            </IonLabel>
-                            <IonToggle checked={theme === Theme.Dark} onIonChange={update} mode='md'></IonToggle>
-                        </IonItem>
-                    </IonMenuToggle>
-                    <IonListHeader mode='md'>
-                        Time
-                    </IonListHeader>
-                    <IonMenuToggle autoHide={false}>
-                        <IonItem mode='md'>
-                            <IonLabel mode='md'>
-                                Work
-                            </IonLabel>
-                            <IonDatetime onIonChange={updateWork} displayFormat='mm' pickerFormat='mm' mode='md'></IonDatetime>
-                        </IonItem>
-                    </IonMenuToggle>
-                    <IonMenuToggle autoHide={false}>
-                        <IonItem mode='md'>
-                            <IonLabel mode='md'>
-                                Break
-                            </IonLabel>
-                            <IonDatetime onIonChange={updateBreak} displayFormat='mm' pickerFormat='mm' mode='md'></IonDatetime>
-                        </IonItem>
-                    </IonMenuToggle>
-                </IonList>
-            </IonContent>
-        </IonMenu>
+        <>
+            <IonAlert mode='md' onDidDismiss={() => setShouldClearLocalStorage(false)} isOpen={shouldClearLocalStorage} header='Are you sure?' subHeader='Note that this will logout you.' buttons={[
+                {
+                    text: 'I know. Just delete it!',
+                    handler: () => {
+                        const email = localStorage.getItem('email');
+                        const password = localStorage.getItem('password');
+                        const credentials = localStorage.getItem('credentials');
+
+                        if (email !== undefined && email !== null && password !== undefined && password !== null) {
+                            localStorage.removeItem('email');
+                            localStorage.removeItem('password');
+                        };
+
+                        if (credentials !== undefined && credentials !== null) {
+                            localStorage.removeItem('credentials');
+                        };
+
+                        history.push('/login');
+                    }
+                },
+                {
+                    text: 'Don\'t delete it.',
+                    handler: () => {
+                        setShouldClearLocalStorage(false);
+                    }
+                }
+            ]} />
+            <IonMenu color={theme} side='start' swipeGesture={true} contentId='main'>
+                <IonHeader color={theme} mode='md'>
+                    <IonToolbar color={theme} mode='md'>
+                        <IonTitle>
+                            Settings
+                        </IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent color={theme}>
+                    <IonList style={{'padding': '0px'}} color={theme} lines='none' mode='md'>
+                        <IonListHeader color={theme} mode='md'>
+                            Theme
+                        </IonListHeader>
+                        <IonMenuToggle color={theme} autoHide={false}>
+                            <IonItem color={theme} mode='md'>
+                                <IonLabel mode='md'>
+                                    Dark mode
+                                </IonLabel>
+                                <IonToggle checked={theme === Theme.Dark} onIonChange={update} mode='md' />
+                            </IonItem>
+                        </IonMenuToggle>
+                        <IonListHeader color={theme} mode='md'>
+                            Time
+                        </IonListHeader>
+                        <IonMenuToggle color={theme} autoHide={false}>
+                            <IonItem color={theme} mode='md'>
+                                <IonLabel mode='md'>
+                                    Work
+                                </IonLabel>
+                                <IonDatetime onIonChange={updateWork} displayFormat='mm' pickerFormat='mm' mode='md'></IonDatetime>
+                            </IonItem>
+                        </IonMenuToggle>
+                        <IonMenuToggle color={theme} autoHide={false}>
+                            <IonItem color={theme} mode='md'>
+                                <IonLabel mode='md'>
+                                    Break
+                                </IonLabel>
+                                <IonDatetime onIonChange={updateBreak} displayFormat='mm' pickerFormat='mm' mode='md'></IonDatetime>
+                            </IonItem>
+                        </IonMenuToggle>
+                        <IonListHeader color={theme} mode='md'>
+                            Cache
+                        </IonListHeader>
+                        <IonMenuToggle color={theme} autoHide={false}>
+                            <IonItem color={theme} mode='md'>
+                                <IonLabel mode='md'>
+                                    Clean localStorage?
+                                </IonLabel>
+                                <IonToggle checked={shouldClearLocalStorage} onIonChange={toggleShouldClearLocalStorage} mode='md' />
+                            </IonItem>
+                        </IonMenuToggle>
+                    </IonList>
+                </IonContent>
+            </IonMenu>
+        </>
     );
 });
+
+export const Menu = withRouter(MenuContainer);

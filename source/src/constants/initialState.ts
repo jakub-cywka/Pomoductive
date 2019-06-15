@@ -11,17 +11,15 @@ import * as Firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBBLa1JB7qOx3K9qLh8E7GwtmH36Fbbs8E",
-    authDomain: "pomoductive-app.firebaseapp.com",
-    databaseURL: "https://pomoductive-app.firebaseio.com",
-    projectId: "pomoductive-app",
-    storageBucket: "pomoductive-app.appspot.com",
-    messagingSenderId: "1093188668461",
-    appId: "1:1093188668461:web:7289e6ca321e5ad3"
-};
-
-Firebase.initializeApp(firebaseConfig);
+Firebase.initializeApp({
+    apiKey: 'AIzaSyBBLa1JB7qOx3K9qLh8E7GwtmH36Fbbs8E',
+    authDomain: 'pomoductive-app.firebaseapp.com',
+    databaseURL: 'https://pomoductive-app.firebaseio.com',
+    projectId: 'pomoductive-app',
+    storageBucket: 'pomoductive-app.appspot.com',
+    messagingSenderId: '1093188668461',
+    appId: '1:1093188668461:web:7289e6ca321e5ad3'
+});
 
 export const initialState: State = {
     time: {
