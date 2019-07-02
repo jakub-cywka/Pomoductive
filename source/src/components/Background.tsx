@@ -1,31 +1,18 @@
-import React, { HTMLAttributes } from 'react';
-
-import { connect } from 'react-redux';
+import * as React from 'react';
 
 import { State } from '../interfaces/state';
 
 import { Theme } from '../enums/theme';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-    theme: Theme;
+import { useSelector } from 'react-redux';
+
+export default ({ ...attributes }: React.HTMLAttributes<HTMLDivElement>) => {
+
+    const theme = useSelector<State, Theme>(state => state.theme);
+
+    return (
+        <div {...attributes} className={`is-container is-fullsized is-${theme}`}>
+            {attributes.children}
+        </div>
+    )
 };
-
-const mapStateToProps: (state: State) => ({
-    theme: Theme;
-}) = state => ({
-    theme: state.theme
-});
-
-/**
- * @copyright OpenSourced
- * @author Jakub Cywka
- * @description A wrapper component for a whole application.
- * @param children The element to render inside of the Background component.
- * @version 0.3.0
- * @license MIT
- */
-export const Background = connect(mapStateToProps, () => ({}))(({ ...attributes }: Props) => (
-    <div {...attributes} className={`is-container is-fullsized is-${attributes.theme}`}>
-        {attributes.children}
-    </div>
-));

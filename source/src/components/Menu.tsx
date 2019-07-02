@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { connect, ConnectedComponentClass } from 'react-redux';
+import { connect, ConnectedComponentClass, useSelector, useDispatch } from 'react-redux';
 
 import { State } from '../interfaces/state';
 import { UpdateTheme } from '../interfaces/updateTheme';
@@ -22,75 +22,53 @@ import { updateTime } from '../functions/updateTime';
 import { ToggleChangeEventDetail } from '@ionic/core';
 import { RouteComponentProps, withRouter } from 'react-router';
 
-/**
- * @copyright OpenSourced
- * @author Jakub Cywka
- * @description A menu component for the pomodoro settings.
- * @version 0.3.0
- * @license MIT
- */
-const MenuContainer = connect((state: State): {
-    theme: Theme;
-    timeType: TimeType;
-} => ({
-    theme: state.theme,
-    timeType: state.timeType
-}), (dispatch: Dispatch<AnyAction>): {
-    updateTheme: (payload: UpdateTheme) => AnyAction;
-    updateBreakTime: (payload: UpdateBreakTime) => AnyAction;
-    updateWorkTime: (payload: UpdateWorkTime) => AnyAction;
-    updateTime: (payload: UpdateTime) => AnyAction;
-} => ({
-    updateTheme: (payload: UpdateTheme): AnyAction => dispatch(updateTheme(payload)),
-    updateBreakTime: (payload: UpdateBreakTime): AnyAction => dispatch(updateBreakTime(payload)),
-    updateWorkTime: (payload: UpdateWorkTime): AnyAction => dispatch(updateWorkTime(payload)),
-    updateTime: (payload: UpdateTime): AnyAction => dispatch(updateTime(payload))
-}))(({ theme, updateTheme, updateBreakTime, updateWorkTime, updateTime, timeType, history }: {
-    theme: Theme;
-    timeType: TimeType;
-    updateTheme: (payload: UpdateTheme) => AnyAction;
-    updateBreakTime: (payload: UpdateBreakTime) => AnyAction;
-    updateWorkTime: (payload: UpdateWorkTime) => AnyAction;
-    updateTime: (payload: UpdateTime) => AnyAction;
-} & RouteComponentProps): JSX.Element => {
+export default withRouter(({ history }) => {
+
+    const theme = useSelector<State, Theme>(state => state.theme);
+    // const updateTheme = useSelector<State, updateTheme>(state => state.updateTheme);
+    // const updateBreakTime = useSelector<State, updateBreakTime>(state => state.updateBreakTime);
+    // const updateWorkTime = useSelector<State, updateWorkTime>(state => state.updateWorkTime);
+    // const updateTime = useSelector<State, updateTime>(state => state.updateTime);
+    const dispatch = useDispatch();
+    const timeType = useSelector<State, TimeType>(state => state.timeType);
 
     const update: () => void = (): void => {
-        updateTheme({
+        dispatch(updateTheme({
             theme: theme === Theme.Light ? Theme.Dark : Theme.Light
-        } as UpdateTheme);
+        } as UpdateTheme));
     };
 
     const updateBreak = (event: any): void => {
-        updateBreakTime({
+        dispatch(updateBreakTime({
             breakTime: {
                 minutes: parseInt(event.currentTarget.value.substring(event.currentTarget.value.indexOf(':') + 1, event.currentTarget.value.indexOf(':') + 3)),
                 seconds: 0
             }
-        } as UpdateBreakTime);
+        } as UpdateBreakTime));
         if (timeType === TimeType.Break) {
-            updateTime({
+            dispatch(updateTime({
                 time: {
                     minutes: parseInt(event.currentTarget.value.substring(event.currentTarget.value.indexOf(':') + 1, event.currentTarget.value.indexOf(':') + 3)),
                     seconds: 0
                 }
-            } as UpdateTime);
+            } as UpdateTime));
         };
     };
 
     const updateWork = (event: any): void => {
-        updateWorkTime({
+        dispatch(updateWorkTime({
             workTime: {
                 minutes: parseInt(event.currentTarget.value.substring(event.currentTarget.value.indexOf(':') + 1, event.currentTarget.value.indexOf(':') + 3)),
                 seconds: 0
             }
-        } as UpdateWorkTime);
+        } as UpdateWorkTime));
         if (timeType === TimeType.Work) {
-            updateTime({
+            dispatch(updateTime({
                 time: {
                     minutes: parseInt(event.currentTarget.value.substring(event.currentTarget.value.indexOf(':') + 1, event.currentTarget.value.indexOf(':') + 3)),
                     seconds: 0
                 }
-            } as UpdateTime);
+            } as UpdateTime));
         };
     };
 
@@ -186,5 +164,3 @@ const MenuContainer = connect((state: State): {
         </>
     );
 });
-
-export const Menu = withRouter(MenuContainer);

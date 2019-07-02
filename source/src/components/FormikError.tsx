@@ -5,7 +5,7 @@ import { ErrorMessage } from 'formik';
 import { Components } from '@ionic/core';
 import { IonChip } from '@ionic/react';
 
-export function FormikError({ name, ...attributes }: {
+export default function({ name, ...attributes }: {
     name: string;
 } & Components.IonChipAttributes) {
     return (

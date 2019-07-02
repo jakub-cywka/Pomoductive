@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 
 import { Dispatch, AnyAction } from 'redux';
 
@@ -21,10 +21,11 @@ import { Formik, FormikActions, Form } from 'formik';
 import { IonButton, IonItemGroup, IonNote, IonText } from '@ionic/react';
 
 const Alert = lazy(() => import('./Alert'));
-import { FormikField } from './FormikField';
-import { FormItem } from './FormItem';
-import { FormLabel } from './FormLabel';
-import { PasswordFormItem } from './PasswordFormItem';
+import FormikField from './FormikField';
+import FormItem from './FormItem';
+import FormLabel from './FormLabel';
+import PasswordFormItem from './PasswordFormItem';
+import FormikError from './FormikError';
 
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -38,7 +39,6 @@ const SignUpSchema = Yup.object().shape({
 });
 
 import firebase from 'firebase';
-import { FormikError } from './FormikError';
 
 interface MapStateToProps {
     user: User;
@@ -64,17 +64,24 @@ const mapDispatchToProps: (dispatch: Dispatch<Action>) => MapDispatchToProps = d
     registerUserWithOAuth2: (userCredential: firebase.auth.UserCredential) => dispatch(registerUserWithOAuth2(userCredential) as unknown as Action)
 });
 
-const RegisterFormContainer: ({ user, updateUser, registerUserWithEmail, firebase, registerUserWithOAuth2, history }: Props & RouteComponentProps) => JSX.Element = ({ user, updateUser, registerUserWithEmail, registerUserWithOAuth2, firebase, history }) => {
+export default withRouter(({ history }) => {
+
+
+    const user = useSelector<State, User>(state => state.user);
+    
+    const dispatch = useDispatch();
 
     function onFormikSubmit(values: FormUser, formikActions: FormikActions<FormUser>) {
         formikActions.setSubmitting(false);
         
-        updateUser({
-            ...user,
-            ...values
-        });
+        dispatch(updateUser({
+            user: {
+                ...user,
+                ...values
+            }
+        }));
 
-        registerUserWithEmail();
+        dispatch(registerUserWithEmail());
 
         history.push('/home');
     };
@@ -120,6 +127,4 @@ const RegisterFormContainer: ({ user, updateUser, registerUserWithEmail, firebas
             </Formik>
         </>
     );  
-};
-
-export const RegisterForm = withRouter(connect(mapStateToProps, mapDispatchToProps)(RegisterFormContainer) as any);
+});

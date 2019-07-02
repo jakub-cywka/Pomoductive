@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Circle } from '../components/Circle';
-import { Background } from '../components/Background';
-import { TimeText } from '../components/TimeText';
-import { ThenText } from '../components/ThenText';
-import { MiddleAction } from '../components/MiddleAction';
-import { SideAction } from '../components/SideAction';
-import { Actions } from '../components/Actions';
+import Circle from '../components/Circle';
+import Background from '../components/Background';
+import TimeText from '../components/TimeText';
+import ThenText from '../components/ThenText';
+import MiddleAction from '../components/MiddleAction';
+import SideAction from '../components/SideAction';
+import Actions from '../components/Actions';
 
 import { Direction } from '../enums/direction';
 

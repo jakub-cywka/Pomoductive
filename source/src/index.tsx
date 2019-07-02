@@ -14,9 +14,12 @@ import App from './App';
 import { Provider } from 'react-redux';
 
 import { store } from './constants/store';
+
 import { IonApp, IonSplitPane, IonPage, IonMenuButton, IonButtons } from '@ionic/react';
-import { Background } from './components/Background';
-import { Menu } from './components/Menu';
+
+import Background from './components/Background';
+import Menu from './components/Menu';
+
 import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render((

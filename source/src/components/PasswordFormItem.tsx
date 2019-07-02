@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import { FormItem } from './FormItem';
-import { FormLabel } from './FormLabel';
-import { FormikField } from './FormikField';
+import FormItem from './FormItem';
+import FormLabel from './FormLabel';
+import FormikField from './FormikField';
+import FormikError from './FormikError';
 
 import { IonButton, IonIcon } from '@ionic/react';
 import { Components } from '@ionic/core';
@@ -12,9 +13,8 @@ import { useSelector } from 'react-redux';
 import { State } from '../interfaces/state';
 
 import { Theme } from '../enums/theme';
-import { FormikError } from './FormikError';
 
-export function PasswordFormItem({ labelText, ...attributes }: Components.IonInputAttributes & {
+export default function({ labelText, ...attributes }: Components.IonInputAttributes & {
     labelText?: string;
 }) {
 

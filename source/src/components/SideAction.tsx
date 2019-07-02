@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import { IonSegmentButton } from '@ionic/react';
 
-import { connect, ConnectedComponentClass } from 'react-redux';
-
-import { Dispatch, AnyAction } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { UpdateTimerState } from '../interfaces/updateTimerState';
 import { UpdateTimeType } from '../interfaces/updateTimeType';
@@ -29,70 +27,34 @@ import { Plugins } from '@capacitor/core';
 
 const { LocalNotifications } = Plugins;
 
-/**
- * @copyright OpenSourced
- * @author Jakub Cywka
- * @description A component that displays the side action button (forward or backward, depending on props).
- * @param direction The direction to use with that component.
- * @version 0.3.0
- */
-export const SideAction: ConnectedComponentClass<({ direction, updateTimerState, updateTimeType, updateThen, updateTime, timeType, then, workTime, breakTime, updateId, time }: {
-    direction: Direction;
-    timeType: TimeType;
-    then: Then;
-    workTime: Time;
-    breakTime: Time;
-    time: Time;
-    updateTimerState: (payload: UpdateTimerState) => AnyAction;
-    updateTimeType: (payload: UpdateTimeType) => AnyAction;
-    updateThen: (payload: UpdateThen) => AnyAction;
-    updateTime: (payload: UpdateTime) => AnyAction;
-    updateId: (payload: UpdateId) => AnyAction;
-}) => JSX.Element, Pick<any, string | number | symbol>> = connect((state: State): {
-    timeType: TimeType;
-    then: Then;
-    workTime: Time;
-    breakTime: Time;
-    time: Time;
-} => ({
-    timeType: state.timeType,
-    then: state.then,
-    workTime: state.workTime,
-    breakTime: state.breakTime,
-    time: state.time
-}), (dispatch: Dispatch): {
-    updateTimerState: (payload: UpdateTimerState) => AnyAction;
-    updateTimeType: (payload: UpdateTimeType) => AnyAction;
-    updateThen: (payload: UpdateThen) => AnyAction;
-    updateTime: (payload: UpdateTime) => AnyAction;
-    updateId: (payload: UpdateId) => AnyAction;
-} => ({
-    updateTimerState: (payload: UpdateTimerState): AnyAction => dispatch(updateTimerState(payload)),
-    updateTimeType: (payload: UpdateTimeType): AnyAction => dispatch(updateTimeType(payload)),
-    updateThen: (payload: UpdateThen): AnyAction => dispatch(updateThen(payload)),
-    updateTime: (payload: UpdateTime): AnyAction => dispatch(updateTime(payload)),
-    updateId: (payload: UpdateId): AnyAction => dispatch(updateId(payload))
-}))(({ direction, updateTimerState, updateTimeType, updateThen, updateTime, timeType, then, workTime, breakTime, updateId, time }: any): JSX.Element => {
+export default ({ direction }: {direction: Direction}) => {
+
+    const timeType = useSelector<State, TimeType>(state => state.timeType); 
+    const then = useSelector<State, Then>(state => state.then);
+    const workTime = useSelector<State, Time>(state => state.workTime);
+    const breakTime = useSelector<State, Time>(state => state.breakTime);
+    const time = useSelector<State, Time>(state => state.time); 
+    const dispatch = useDispatch();
 
     const onClick = (): void => {
-        updateTimerState({
+        dispatch(updateTimerState({
             timerState: TimerState.Reseted
-        } as UpdateTimerState);
-        updateTimeType({
+        } as UpdateTimerState));
+        dispatch(updateTimeType({
             timeType: timeType === TimeType.Work ? TimeType.Break : TimeType.Work
-        } as UpdateTimeType);
-        updateThen({
+        } as UpdateTimeType));
+        dispatch(updateThen({
             then: then === Then.Work ? Then.Break : Then.Work
-        } as UpdateThen);
-        updateId({
+        } as UpdateThen));
+        dispatch(updateId({
             id: null as unknown as NodeJS.Timeout
-        } as UpdateId);
-        updateTime({
+        } as UpdateId));
+        dispatch(updateTime({
             time: timeType === TimeType.Work ? {...breakTime} : {...workTime}
-        } as UpdateTime);
+        } as UpdateTime));
     };
 
-    React.useEffect((): void => {
+    React.useEffect(() => {
 
         const scheduleNotification = async () => {
             await LocalNotifications.schedule({
@@ -111,7 +73,8 @@ export const SideAction: ConnectedComponentClass<({ direction, updateTimerState,
             onClick();
             scheduleNotification();
         };
-    }, [time])
+
+    }, [time, onClick])
 
     return (
         <IonSegmentButton mode='md'>
@@ -123,4 +86,4 @@ export const SideAction: ConnectedComponentClass<({ direction, updateTimerState,
             </div>
         </IonSegmentButton>
     );
-});
+};

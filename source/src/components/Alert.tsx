@@ -1,10 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 
 import { IonBadge } from '@ionic/react';
 import { Components } from '@ionic/core';
 
-interface IonBadgeAttributesWithChildren extends Components.IonBadgeAttributes {
-    children: any;
-};
+import ChildrenProp from '../interfaces/childrenProp';
 
-export default ({ ...attributes }: IonBadgeAttributesWithChildren): JSX.Element => <IonBadge children={attributes.children} {...attributes as Components.IonBadge} />
+export default ({ children, ...attributes }: Components.IonBadgeAttributes & ChildrenProp): JSX.Element => <IonBadge children={children} {...attributes as Components.IonBadge} />

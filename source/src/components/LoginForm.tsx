@@ -1,13 +1,9 @@
-import React, { useState, lazy, useEffect, Suspense, SetStateAction, Dispatch as ReactDispatch } from 'react';
+import React, { useState, lazy } from 'react';
 
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { State } from '../interfaces/state';
 import { User } from '../interfaces/user';
-import { Action } from '../interfaces/action';
-import { FormStatus } from '../interfaces/formStatus';
-
-import { Dispatch as ReduxDispatch } from 'redux';
 
 import { updateUser } from '../functions/updateUser';
 import { loginUserWithEmail } from '../functions/loginUserWithEmail';
@@ -15,58 +11,36 @@ import { loginUserWithOAuth2 } from '../functions/loginUserWithOAuth2';
 
 import { Formik, FormikActions, Form } from 'formik';
 
-import { FormMessageStatus } from '../enums/formMessageStatus';
 import { Theme } from '../enums/theme';
 
 import { IonItemGroup, IonButton, IonText, IonCheckbox, IonItem, IonLabel } from '@ionic/react';
 import { CheckboxChangeEventDetail } from '@ionic/core';
 
-import { FormItem } from './FormItem';
-import { FormLabel } from './FormLabel';
-import { FormikField } from './FormikField';
+import FormItem from './FormItem';
+import FormLabel from './FormLabel';
+import FormikField from './FormikField';
 const Alert = lazy(() => import('./Alert'));
-import { PasswordFormItem } from './PasswordFormItem';
-import { FormikError } from './FormikError';
+import PasswordFormItem from './PasswordFormItem';
+import FormikError from './FormikError';
 
 import { StyledFirebaseAuth } from 'react-firebaseui';
 
-import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import * as Yup from 'yup';
 
 import firebase from 'firebase';
-
-interface MapStateToProps {
-    user: User;
-    theme: Theme;
-};
 
 const SignInSchema = Yup.object().shape({
     email: Yup.string().required('Email is required.').email('Must be email-like.').lowercase('Must be lower case.'),
     password: Yup.string().required('Password is required.').min(8, 'Password is too short.').max(25, 'Password is too long.')
 });
 
-interface MapDispatchToProps {
-    updateUser: (user: User) => Action;
-    loginUserWithEmail: (shouldKeepLoggedIn: boolean) => Action;
-    loginUserWithOAuth2: (userCredential: firebase.auth.UserCredential, shouldKeepLoggedIn: boolean) => Action;
-};
-
-interface Props extends MapStateToProps, MapDispatchToProps {  };
-
-const mapStateToProps: (state: State) => MapStateToProps = state => ({
-    user: state.user,
-    theme: state.theme
-});
-
-const mapDispatchToProps: (dispatch: ReduxDispatch<Action>) => MapDispatchToProps = dispatch => ({
-    updateUser: user => dispatch(updateUser({ user })),
-    loginUserWithEmail: shouldKeepLoggedIn => dispatch(loginUserWithEmail(shouldKeepLoggedIn) as unknown as Action),
-    loginUserWithOAuth2: (userCredential, shouldKeepLoggedIn) => dispatch(loginUserWithOAuth2(userCredential, shouldKeepLoggedIn) as unknown as Action)
-});
-
-export const LoginFormContainer: ({ user, updateUser, loginUserWithEmail, loginUserWithOAuth2, theme, history }: Props & RouteComponentProps) => JSX.Element = ({ user, updateUser, loginUserWithEmail, loginUserWithOAuth2, theme, history }) => {
+export default withRouter(({ history }: RouteComponentProps) => {
     const [shouldKeepLoggedIn, setShouldKeepLoggedIn] = useState(false);
+    const user = useSelector<State, User>(state => state.user);
+    const dispatch = useDispatch();
+    const theme = useSelector<State, Theme>(state => state.theme);
 
     function toggleShouldKeepLoggedIn(event: CustomEvent<CheckboxChangeEventDetail>) {
         setShouldKeepLoggedIn(event.detail.checked);
@@ -74,7 +48,10 @@ export const LoginFormContainer: ({ user, updateUser, loginUserWithEmail, loginU
 
     function onFormikSubmit(values: User, formikActions: FormikActions<User>): void {
         formikActions.setSubmitting(false);
-        updateUser(values);
+        dispatch(updateUser({ user: {
+            ...user,
+            ...values
+         } }));
         loginUserWithEmail(shouldKeepLoggedIn);
         history.push('/home');
     };
@@ -132,6 +109,4 @@ export const LoginFormContainer: ({ user, updateUser, loginUserWithEmail, loginU
             }} firebaseAuth={firebase.auth()} />
         </>
     );
-};
-
-export const LoginForm = withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginFormContainer) as any);
+});

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Background } from '../components/Background';
-import { LoginForm } from '../components/LoginForm';
-import { SectionTitle } from '../components/SectionTitle';
+import Background from '../components/Background';
+import LoginForm from '../components/LoginForm';
+import SectionTitle from '../components/SectionTitle';
 
 export default (): JSX.Element => (
     <Background style={{
